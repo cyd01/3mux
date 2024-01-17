@@ -5,7 +5,6 @@ import (
 	"crypto/rand"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"math/big"
 	"net"
@@ -52,7 +51,7 @@ func main() {
 	if len(os.Args) < 2 {
 		if parentSessionID != "" {
 			namePath := path.Join(threemuxDir, parentSessionID, "name")
-			thisName, _ := ioutil.ReadFile(namePath)
+			thisName, _ := os.ReadFile(namePath)
 			fmt.Printf("You're in session `%s`\n", string(thisName))
 			var choice string
 			for choice != "y" && choice != "n" {
@@ -236,14 +235,14 @@ func main() {
 		}
 		fmt.Println("Session sucessfully killed.")
 	case "ls", "ps":
-		children, err := ioutil.ReadDir(threemuxDir)
+		children, err := os.ReadDir(threemuxDir)
 		if err != nil {
 			panic(err)
 		}
 		fmt.Println("Sessions:")
 		for _, child := range children {
 			namePath := path.Join(threemuxDir, child.Name(), "name")
-			thisName, _ := ioutil.ReadFile(namePath)
+			thisName, _ := os.ReadFile(namePath)
 			fmt.Printf("- %s\n", string(thisName))
 		}
 	case "detach":
@@ -307,7 +306,7 @@ func initializeSession(sessionName string) *SessionInfo {
 	}
 
 	nameFilePath := path.Join(sessionPath, "name")
-	err = ioutil.WriteFile(nameFilePath, []byte(sessionName), 0600)
+	err = os.WriteFile(nameFilePath, []byte(sessionName), 0600)
 	if err != nil {
 		fmt.Println("Session creation failed. Error while recording session metadata:", err)
 		err = os.Remove(sessionPath)
@@ -325,7 +324,7 @@ func initializeSession(sessionName string) *SessionInfo {
 }
 
 func findSession(sessionName string) (sessionInfo *SessionInfo, found bool, err error) {
-	children, err := ioutil.ReadDir(threemuxDir)
+	children, err := os.ReadDir(threemuxDir)
 	if err != nil {
 		return nil, false, err
 	}
@@ -334,7 +333,7 @@ func findSession(sessionName string) (sessionInfo *SessionInfo, found bool, err 
 		uuid := child.Name()
 		dirPath := path.Join(threemuxDir, uuid)
 		namePath := path.Join(dirPath, "name")
-		nameRaw, err := ioutil.ReadFile(namePath)
+		nameRaw, err := os.ReadFile(namePath)
 		if err != nil {
 			return nil, false, err
 		}
@@ -357,7 +356,7 @@ func refuseNesting() {
 // returns empty name upon Ctrl-C
 func defaultPrompt() (sessionName string, isNew bool) {
 	os.MkdirAll(threemuxDir, 0755)
-	children, err := ioutil.ReadDir(threemuxDir)
+	children, err := os.ReadDir(threemuxDir)
 	if err != nil {
 		panic(err)
 	}
@@ -368,7 +367,7 @@ func defaultPrompt() (sessionName string, isNew bool) {
 
 	for idx, child := range children {
 		dir := path.Join(threemuxDir, child.Name())
-		thisName, _ := ioutil.ReadFile(path.Join(dir, "name"))
+		thisName, _ := os.ReadFile(path.Join(dir, "name"))
 
 		options = append(options, strings.TrimSpace(string(thisName)))
 

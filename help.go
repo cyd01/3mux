@@ -24,4 +24,27 @@ SHORTCUTS:
 	Alt+Shift+Arrow   Move pane
 	Alt+Arrow         Move selection
 	Alt+/             Toggle search
+
+Key Bindings
+	Alt+Enter / Alt+N  Create a new pane
+	Alt+Shift+F        Make the selected pane fullscreen. Useful for copying text
+	Alt+←/↓/↑/→        Select an adjacent pane
+	Alt+h/j/k/l        Select an adjacent pane
+	Alt+Shift+←/↓/↑/→  Move the selected pane
+	Alt+Shift+h/j/k/l  Move the selected pane
+	Alt+R              Enter resize mode. Resize selected pane with arrow keys or h/j/k/l. Exit using any other key(s)
+	Alt+/              Enter search mode. Type query, navigate between results with arrow keys or n/N
+	Scroll 	           Move through scrollback
+	Shift              Many terminal emulators support selecting text while pressing this key
+
+Supported tmux Bindings
+	Ctrl+b "           Split horizontally
+	Ctrl+b %           Split vertically
+	Ctrl+b {           Move pane left
+	Ctrl+b }           Move pane right
+
+Supported screen Bindings
+	Ctrl+a |           Split horizontally
+	Ctrl+a S           Split vertically
+	Ctrl+a Tab         Cycle forward through panes
 `
